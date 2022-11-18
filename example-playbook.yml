@@ -66,7 +66,6 @@
       - install-chrony
       - install-google-fonts
       - install-msttcore-fonts
-#deprecated use the service instead       - install-reverse-tunnel
       - install-reverse-tunnel-service
       - renice-mariadb
       - renice-slurmd
@@ -120,13 +119,13 @@
         - qt_version:        "5.15.6"
         - qwt_version:       "6.1.6"
         - cores_for_parallel_compile: "{{ ansible_processor_vcpus }}"
-        - us3_branch:        "release-2022-Q2"
-        - sql_branch:        "release-2022-Q2"
-        - dbinst_branch:     "release-2022-Q2"
-        - gridctl_branch:    "release-2022-Q2"
-        - common_branch:     "release-2022-Q2"
-        - newinst_branch:    "release-2022-Q2"
-        - webinfo_branch:    "release-2022-Q2"
+        - us3_branch:        "release-2022-Q3"
+        - sql_branch:        "release-2022-Q3"
+        - dbinst_branch:     "release-2022-Q3"
+        - gridctl_branch:    "release-2022-Q3"
+        - common_branch:     "release-2022-Q3"
+        - newinst_branch:    "release-2022-Q3"
+        - webinfo_branch:    "release-2022-Q3"
         - airavata_branch:   "master"
         - utils_branch:      "main"
 
@@ -135,20 +134,14 @@
         - postfix_relay_smtp_user: us.etc.tests@gmail.com
         - postfix_relay_smtp_password: put_app_password_here
 
-        # use install-reverse-tunnel-service instead
-        ### required if install-reverse-tunnel role run
-        ### you will manually need to install usadmin's public key on the rtunnel_user @ rtunnel_ip's authorized keys
-        ##- rtunnel_user: "ultrascan"
-        ##- rtunnel_ip: "secure.aucsolutions.com"
-        ### assign unique port
-        ##- rtunnel_port: "220XX"
-
         # required for role install-reverse-tunnel-service
         # you will manually need to install usadmin's public key on the rtunnel_user @ rtunnel_ip's authorized keys
         - rtunnel_user: "ultrascan"
         - rtunnel_ip: "secure.aucsolutions.com"
         # assign unique port (if both rtunnel & rtunnel service installed, use different ports!
         - rtunnel_service_port: "220XX"
+        # any extra command options required to ssh, e.g. "-J user@jumpserver" etc.
+        - rtunnel_service_ssh_extras: ""
         ## enabled at boot up - "no" or "yes"
         - rtunnel_service_enabled: "yes"
         ## current state -  "started" or "stopped" 
