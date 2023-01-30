@@ -19,7 +19,7 @@
     - name: collect metadata string variants
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit 2 --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
       when: collect_metadata_string_variants == true
@@ -30,6 +30,17 @@
         dest: "{{ metadata_dir }}/"
         flat: yes
       when: collect_metadata_string_variants == true
+
+    - name: ensure directory to retrieve metadata
+      ansible.builtin.file:
+        state : directory
+        path  : '{{ metadata_dir }}'
+        mode  : '0755'
+        owner : usadmin
+        group : usadmin
+
+      delegate_to: localhost
+      when: get_metadata == true or collect_metadata_string_variants == true
 
     - name: make training data directory
       ansible.builtin.file:
@@ -42,7 +53,7 @@
     - name: collect metadata
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit 2 --metadata --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --metadata --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
       when: get_metadata == true
