@@ -1,0 +1,35 @@
+---
+# collect usage status
+# academic hosts with dbs
+- hosts: academichostswithdbs
+
+  gather_facts: yes
+  remote_user:  usadmin
+  become:       yes
+  
+  pre_tasks:
+    - name: update uslims3_dbutils for latest version of metadata
+      shell:
+        chdir: /home/us3/lims/database/utils
+        cmd: git pull
+      become: yes
+      become_user: us3
+
+    - name: collect metadata
+      shell:
+        chdir: /home/us3/lims/database/utils
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
+      become: yes
+      become_user: us3
+
+    - name: metadata log into {{ metadata_dir }}
+      fetch:
+        src: /home/us3/lims/database/utils/{{ inventory_hostname }}_metadata.txt
+        dest: "{{ metadata_dir }}/"
+        flat: yes
+
+  roles:
+
+  vars:
+    - metadata_dir  : "/home/usadmin/metadata/{{ ansible_date_time.date }}"
+    
