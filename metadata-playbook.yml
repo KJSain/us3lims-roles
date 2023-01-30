@@ -14,22 +14,62 @@
         cmd: git pull
       become: yes
       become_user: us3
+      when: update_git == true
 
-    - name: collect metadata
+    - name: collect metadata string variants
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit 2 --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
+      when: collect_metadata_string_variants == true
 
     - name: metadata log into {{ metadata_dir }}
       fetch:
         src: /home/us3/lims/database/utils/{{ inventory_hostname }}_metadata.txt
         dest: "{{ metadata_dir }}/"
         flat: yes
+      when: collect_metadata_string_variants == true
+
+    - name: make training data directory
+      ansible.builtin.file:
+        path: '{{ training_directory }}'
+        state: directory
+        mode: '0755'
+        owner: us3
+        group: us3
+
+    - name: collect metadata
+      shell:
+        chdir: /home/us3/lims/database/utils
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit 2 --metadata --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
+      become: yes
+      become_user: us3
+      when: get_metadata == true
+
+    - name: retrieve metadata
+      synchronize:
+        mode : pull
+        src  : '{{ training_directory }}'
+        dest : '{{ metadata_dir }}/{{ inventory_hostname }}'
+      become: yes
+      become_user: us3
+      when: get_metadata == true
+
+    - name: cleanup metadata
+      ansible.builtin.file:
+        state : absent
+        path  : '{{ training_directory }}'
+      become: yes
+      become_user: us3
+      when: cleanup_metadata == true
 
   roles:
 
   vars:
-    - metadata_dir  : "/home/usadmin/metadata/{{ ansible_date_time.date }}"
-    
+    - metadata_dir                       : "/home/usadmin/metadata/{{ ansible_date_time.date }}"
+    - update_git                         : true
+    - collect_metadata_string_variants   : false
+    - training_directory                 : "/tmp/training"
+    - get_metadata                       : true
+    - cleanup_metadata                   : true
