@@ -84,6 +84,8 @@
       shell:
         chdir: "{{ metadata_dir }}/{{ local_date.stdout }}"
         cmd: cat */*/*_metadata.csv > summary_metadata.csv
+      become: yes
+      become_user: usadmin
       delegate_to : localhost
 
   roles:
