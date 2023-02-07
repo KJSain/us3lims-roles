@@ -19,7 +19,7 @@
     - name: collect metadata string variants
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit {{ limit_results }} --list-string-variants 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
       when: collect_metadata_string_variants == true
@@ -53,7 +53,7 @@
     - name: collect metadata
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --metadata --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit {{ limit_results }} --metadata-csv {{ inventory_hostname }}_metadata.csv --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
       when: get_metadata == true
@@ -84,3 +84,6 @@
     - training_directory                 : "/tmp/training"
     - get_metadata                       : true
     - cleanup_metadata                   : true
+# set limit results to non-zero for testing with a limited number of results per database
+    - limit_results                      : 0
+    
