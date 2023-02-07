@@ -8,6 +8,11 @@
   become:       yes
   
   pre_tasks:
+    - name        : get local date
+      shell       : date +%Y-%m-%d
+      register    : local_date
+      delegate_to : localhost
+
     - name: update uslims3_dbutils for latest version of metadata
       shell:
         chdir: /home/us3/lims/database/utils
@@ -24,17 +29,17 @@
       become_user: us3
       when: collect_metadata_string_variants == true
 
-    - name: metadata log into {{ metadata_dir }}
+    - name: metadata log into {{ metadata_dir }}/{{ local_date.stdout }}
       fetch:
         src: /home/us3/lims/database/utils/{{ inventory_hostname }}_metadata.txt
-        dest: "{{ metadata_dir }}/"
+        dest: "{{ metadata_dir }}/{{ local_date.stdout }}/"
         flat: yes
       when: collect_metadata_string_variants == true
 
     - name: ensure directory to retrieve metadata
       ansible.builtin.file:
         state : directory
-        path  : '{{ metadata_dir }}'
+        path  : '{{ metadata_dir }}/{{ local_date.stdout }}'
         mode  : '0755'
         owner : usadmin
         group : usadmin
@@ -62,7 +67,7 @@
       synchronize:
         mode : pull
         src  : '{{ training_directory }}'
-        dest : '{{ metadata_dir }}/{{ inventory_hostname }}'
+        dest : '{{ metadata_dir }}/{{ local_date.stdout }}/{{ inventory_hostname }}'
       become: yes
       become_user: us3
       when: get_metadata == true
@@ -75,10 +80,16 @@
       become_user: us3
       when: cleanup_metadata == true
 
+    - name: create unified csv
+      shell:
+        chdir: "{{ metadata_dir }}/{{ local_date.stdout }}"
+        cmd: cat */*/*_metadata.csv > summary_metadata.csv
+      delegate_to : localhost
+
   roles:
 
   vars:
-    - metadata_dir                       : "/home/usadmin/metadata/{{ ansible_date_time.date }}"
+    - metadata_dir                       : "/home/usadmin/metadata2"
     - update_git                         : true
     - collect_metadata_string_variants   : false
     - training_directory                 : "/tmp/training"
