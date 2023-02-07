@@ -89,7 +89,7 @@
   roles:
 
   vars:
-    - metadata_dir                       : "/home/usadmin/metadata2"
+    - metadata_dir                       : "/home/usadmin/metadata"
     - update_git                         : true
     - collect_metadata_string_variants   : false
     - training_directory                 : "/tmp/training"
