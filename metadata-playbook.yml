@@ -1,6 +1,7 @@
 ---
 # collect usage status
 # academic hosts with dbs
+#- hosts: demeler9
 - hosts: academichostswithdbs
 
   gather_facts: yes
@@ -58,7 +59,7 @@
     - name: collect metadata
       shell:
         chdir: /home/us3/lims/database/utils
-        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit {{ limit_results }} --metadata-csv {{ inventory_hostname }}_metadata.csv --metadata-output-directory '{{ training_directory }}' 2>&1 > {{ inventory_hostname }}_metadata.txt
+        cmd: php uslims_job_metadata.php --db-exclude uslims3_Demo --limit {{ limit_results }} --metadata-csv {{ inventory_hostname }}_metadata.csv --metadata-output-directory '{{ training_directory }}' --metadata-format-file {{ metadata_format_file }} --dataset-count-range 1 {{ max_datasets }} 2>&1 > {{ inventory_hostname }}_metadata.txt
       become: yes
       become_user: us3
       when: get_metadata == true
@@ -83,10 +84,11 @@
     - name: create unified csv
       shell:
         chdir: "{{ metadata_dir }}/{{ local_date.stdout }}"
-        cmd: cat */*/*_metadata.csv | sed '/^\s*$/d' > summary_metadata.csv
+        cmd: head -1 `ls */*/*_metadata.csv | head -1` > summary_metadata.csv && for i in */*/*_metadata.csv; { sed 1d $i | sed '/^\s*$/d' >> summary_metadata.csv; }
       become: yes
       become_user: usadmin
       delegate_to : localhost
+      run_once: true
 
   roles:
 
@@ -99,4 +101,9 @@
     - cleanup_metadata                   : true
 # set limit results to non-zero for testing with a limited number of results per database
     - limit_results                      : 0
-    
+#    - metadata_format_file               : "uslims_metadata_format.json"
+#    - max_datasets                       : 9999
+# for testing, limit datasets
+    - metadata_format_file               : "uslims_metadata_format_max10datasets.json"
+    - max_datasets                       : 10
+
