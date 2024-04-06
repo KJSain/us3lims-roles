@@ -38,7 +38,7 @@
 
     - name: Install mariadb-devel RedHat
       dnf:
-        enablerepo: powertools
+        enablerepo: "{{ powertools }}"
         name:
           - mariadb-devel
         update_cache: yes

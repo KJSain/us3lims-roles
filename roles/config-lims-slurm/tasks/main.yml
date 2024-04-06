@@ -5,7 +5,7 @@
 
 - name: install slurm dependencies
   dnf:
-        enablerepo: powertools
+        enablerepo: "{{ powertools }}"
         name:
                 - globus-gram-job-manager-slurm
                 - munge-devel
@@ -38,7 +38,6 @@
   get_url:
         url: "https://download.schedmd.com/slurm/slurm-{{ slurm_ver }}.tar.bz2"
         dest: /tmp
-
 
 - name: Get slurm package checksum
   stat:

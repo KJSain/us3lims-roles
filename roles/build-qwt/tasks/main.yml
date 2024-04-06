@@ -21,6 +21,12 @@
 
       when: qwt_src_details.stat.exists == false
 
+    - name: remove old qwt if qt_force_rebuild is defined
+      file:
+        path: /opt/qt-{{ qt_version }}-qwt-{{ qwt_version }}
+        state: absent
+      when: qt_force_rebuild is defined
+
     - name: Check if qwt-{{ qwt_version }}.tar.bz2 is extracted
       stat:
         path: /opt/qt-{{ qt_version }}-qwt-{{ qwt_version }}/qwt.pro
@@ -70,4 +76,4 @@
 #        cmd: make install 
 #      when: false == true
 
-  when: qwt_installed_details.stat.exists == false
+  when: qwt_installed_details.stat.exists == false or qt_force_rebuild is defined

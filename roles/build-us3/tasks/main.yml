@@ -1,5 +1,11 @@
 ---
 
+- name: move old us if qt_force_rebuild is defined
+  command: mv /opt/ultrascan3 /opt/ultrascan3_qt_rebuild_backup_{{ ansible_date_time.epoch }}
+  args:
+    creates: /opt/ultrascan3_qt_rebuild_backup_{{ ansible_date_time.epoch }}
+  when: qt_force_rebuild is defined
+
 - name: Check if us3 already installed, using /opt/ultrascan3/bin/us as a proxy
   stat: 
     path: /opt/ultrascan3/bin/us
@@ -133,7 +139,7 @@
 #        LD_LIBRARY: ${US3LIB}:${QTLIB}:${QWTLIB}:${OLPATH}:${USDIR}
       when: ansible_facts['os_family'] == "Debian"
 
-  when: us_installed_details.stat.exists == false
+  when: us_installed_details.stat.exists == false or qt_force_rebuild is defined
 
 - name: Check if us_somo already installed, using /opt/ultrascan3/bin/us3_somo as a proxy
   stat: 
@@ -247,7 +253,7 @@
         - us_somo.sh
         - us_env.sh
 
-  when: us_somo_installed_details.stat.exists == false
+  when: us_somo_installed_details.stat.exists == false or qt_force_rebuild is defined
 
 - name: Install dependencies to build documentation for us3 for RedHat
   yum:
