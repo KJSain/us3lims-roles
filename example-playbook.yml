@@ -46,6 +46,16 @@
            state: present
         when: ansible_facts['distribution'] == "RedHat" or ansible_os_family == "Rocky" or ansible_facts['distribution'] == "OracleLinux"
 
+      - name: set powertools / crb
+        set_fact:
+          powertools: "crb"
+        when: ansible_facts['distribution_major_version'] == '9'
+
+      - name: set powertools / crb
+        set_fact:
+          powertools: "powertools"
+        when: ansible_facts['distribution_major_version'] == '8'
+
   roles:
       - config-lims-gui
       - config-lims-admin
@@ -81,7 +91,8 @@
   become: yes
   vars:
         - install_workstation: false
-        - install_commercial: true
+        - install_commercial:  true
+        - NO_LIMS:             false
 
         # set the desired compiler optimization
         # for hardware installs
@@ -116,17 +127,17 @@
         - self_signed: 'yes' # change to 'no' to use certbot 
 
         - qt_major_version:  "5.15"
-        - qt_version:        "5.15.9"
+        - qt_version:        "5.15.14"
         - qwt_version:       "6.1.6"
         - cores_for_parallel_compile: "{{ ansible_processor_vcpus }}"
-        - us3_branch:        "release-2023-Q1"
-        - sql_branch:        "release-2023-Q1"
-        - dbinst_branch:     "release-2023-Q1"
-        - gridctl_branch:    "release-2023-Q1"
-        - common_branch:     "release-2023-Q1"
-        - newinst_branch:    "release-2023-Q1"
-        - webinfo_branch:    "release-2023-Q1"
-        - airavata_branch:   "master"
+        - us3_branch:        "release-2023-Q4"
+        - sql_branch:        "release-2023-Q4"
+        - dbinst_branch:     "release-2023-Q4"
+        - gridctl_branch:    "release-2023-Q4"
+        - common_branch:     "release-2023-Q4"
+        - newinst_branch:    "release-2023-Q4"
+        - webinfo_branch:    "release-2023-Q4"
+        - airavata_branch:   "meta-scheduler-prod"
         - utils_branch:      "main"
 
         - postfix_relay_smtp_host: smtp.gmail.com
