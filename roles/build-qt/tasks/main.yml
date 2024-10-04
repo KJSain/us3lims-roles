@@ -67,6 +67,7 @@
           - xcb-util-image-devel
           - xcb-util-renderutil-devel
           - xcb-util-keysyms-devel
+          - libarchive-devel
 #          - libglvnd-devel
 #          - libglvnd-glx
 #          - libglvnd-egl
