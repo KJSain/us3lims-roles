@@ -56,6 +56,11 @@
           powertools: "powertools"
         when: ansible_facts['distribution_major_version'] == '8'
 
+      - name: set user_home
+        set_fact:
+          user_home: "/home"
+        when: user_home is undefined
+
   roles:
       - config-lims-gui
       - config-lims-admin
@@ -90,6 +95,7 @@
       
   become: yes
   vars:
+        - user_home:           "/home"
         - install_workstation: false
         - install_commercial:  true
         - NO_LIMS:             false
@@ -130,13 +136,13 @@
         - qt_version:        "5.15.16"
         - qwt_version:       "6.1.6"
         - cores_for_parallel_compile: "{{ ansible_processor_vcpus }}"
-        - us3_branch:        "release-2024-Q4"
-        - sql_branch:        "release-2024-Q4"
-        - dbinst_branch:     "release-2024-Q4"
-        - gridctl_branch:    "release-2024-Q4"
-        - common_branch:     "release-2024-Q4"
-        - newinst_branch:    "release-2024-Q4"
-        - webinfo_branch:    "release-2024-Q4"
+        - us3_branch:        "release-2025-Q1"
+        - sql_branch:        "release-2025-Q1"
+        - dbinst_branch:     "release-2025-Q1"
+        - gridctl_branch:    "release-2025-Q1"
+        - common_branch:     "release-2025-Q1"
+        - newinst_branch:    "release-2025-Q1"
+        - webinfo_branch:    "release-2025-Q1"
         - airavata_branch:   "meta-scheduler-prod"
         - utils_branch:      "main"
 
