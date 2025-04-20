@@ -12,8 +12,8 @@
 
     - name: validate compiler choice
       fail:
-        msg: "use -e \"compiler_choice=X\" where X is currently 'gcc_rh_9' or 'intel'"
-      when: compiler_choice is not defined or ( compiler_choice != "gcc_rh_9" and compiler_choice != "intel" )
+        msg: "use -e \"compiler_choice=X\" where X is currently 'gcc_rh_9' or 'intel' or 'mpi_gcc'"
+      when: compiler_choice is not defined or ( compiler_choice != "gcc_rh_9" and compiler_choice != "intel" and compiler_choice != "mpi_gcc" )
     - name: validate optimization
       fail:
         msg: "use -e \"optimization='X'\" where X contains your desired optimization flags"
@@ -21,8 +21,8 @@
 
   roles:
 
-#    - build-qt-cluster
-#    - build-libarchive-cluster
+    - build-qt-cluster
+    - build-libarchive-cluster
     - build-us-mpi-cluster
 #    - install-cluster-status
      
@@ -50,6 +50,13 @@
         qmake_cxx      : mpicxx
         qmake_link     : mpicxx
         platform       : linux-icc-64
+        module_loads   : ""
+      mpi_gcc:
+        compiler       : mpicc
+        qmake_cc       : mpicc
+        qmake_cxx      : mpicxx
+        qmake_link     : mpicxx
+        platform       : linux-g++-64
         module_loads   : ""
 
     extra_configs              : "-no-gui -no-pch"
