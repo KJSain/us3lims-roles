@@ -1,10 +1,10 @@
 ---
 # playbook for installing a new cluster
-- hosts: ls6host
+- hosts: localhost
   remote_user: us3
 
 # uncomment if running on localhost
-#  connection: local
+  connection: local
   
   gather_facts: yes
   
@@ -21,7 +21,8 @@
 
   roles:
 
-    - build-qt-cluster
+#    - build-qt-cluster
+#    - build-libarchive-cluster
     - build-us-mpi-cluster
 #    - install-cluster-status
      
@@ -33,7 +34,7 @@
     mpirun                     : "ibrun"
     queue                      : "development"
     comp_opt                   : '{{ optimization }}'
-    cores_for_parallel_compile : 4
+    cores_for_parallel_compile : 128
 
     compilers:
       gcc_rh_9:
@@ -63,11 +64,13 @@
     include_path               : ""
     cores_performance          : 16
 
-    qt_major_version           : "5.14"
-    qt_version                 : "5.14.2"
-    qwt_version                : "6.1.5"
+    qt_major_version           : "5.15"
+    qt_version                 : "5.15.16"
+    qwt_version                : "6.1.6"
     us3_branch                 : "master"
     slurm_cores                : 128
     slurm_sbatch_extras        : ""
+
+    libarchive_vers            : "3.7.9"
 
       
