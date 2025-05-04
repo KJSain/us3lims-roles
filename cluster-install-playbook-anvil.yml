@@ -29,9 +29,9 @@
   vars:
     qt_force_rebuild           : true
     rebuild_us_mpi             : true
-    target_dir                 : /work/01623/us3/ls6
-    qt_dir                     : /work/01623/us3/ls6
-    mpirun                     : "ibrun"
+    target_dir                 : /anvil/projects/x-mcb070039n
+    qt_dir                     : /anvil/projects/x-mcb070039n
+    mpirun                     : "mpirun"
     queue                      : "development"
     comp_opt                   : '{{ optimization }}'
     cores_for_parallel_compile : 128
@@ -79,5 +79,4 @@
     slurm_sbatch_extras        : ""
 
     libarchive_vers            : "3.7.9"
-
       
