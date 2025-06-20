@@ -21,8 +21,8 @@
     name:
       - environment-modules
       - gcc-toolset-9
-      - mpich
-      - mpich-devel
+#      - mpich
+#      - mpich-devel
   when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Rocky"
 
 - name: Install environment-modules and mpich Debian
