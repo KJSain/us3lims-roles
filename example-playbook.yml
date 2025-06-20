@@ -75,6 +75,7 @@
       - build-qt
       - build-qwt
       - build-us3
+      - build-mpich
       - build-us-mpi
       - install-vncserver
       - install-postfix
@@ -133,7 +134,7 @@
         - self_signed: 'yes' # change to 'no' to use certbot 
 
         - qt_major_version:  "5.15"
-        - qt_version:        "5.15.16"
+        - qt_version:        "5.15.17"
         - qwt_version:       "6.1.6"
         - cores_for_parallel_compile: "{{ ansible_processor_vcpus }}"
         - us3_branch:        "release-2025-Q1"
