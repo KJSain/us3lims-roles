@@ -27,7 +27,7 @@ setenv        US3BIN	    $::env(HOME)/ultrascan3/bin
 setenv        US3LIB	    $::env(HOME)/ultrascan3/lib
 setenv        us3	    $::env(HOME)/ultrascan3
 
-prepend-path  PATH          $::env(HOME)/ultrascan3/bin:/opt/qt-{{ qt_version }}/bin
+prepend-path  PATH          $::env(HOME)/ultrascan3/bin:/opt/qt-{{ qt_version }}/bin:/opt/qt-{{ qt_version }}/libexec
 prepend-path  LD_LIBRARY_PATH $::env(HOME)/ultrascan3/lib:/opt/qt-{{ qt_version }}/lib:/opt/qt-{{ qt_version }}-qwt-{{ qwt_version }}/lib
 
 # gcc-toolset-{{ gcc_toolset_version }} addendum
