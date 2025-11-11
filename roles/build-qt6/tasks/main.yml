@@ -125,6 +125,7 @@
           - at-spi2-atk
           - mariadb-devel
           - libarchive-devel
+          - postgresql-devel
         state: present
       when: ansible_facts['os_family'] == "RedHat" or ansible_facts['os_family'] == "Rocky"
 
@@ -147,7 +148,7 @@
     - name: Configure qt {{ qt_version }} for RedHat using gcc-{{ gcc_toolset_version }}
       shell:
         chdir: /opt/qt-everywhere-src-{{ qt_version }}/
-        cmd: . /opt/rh/gcc-toolset-{{ gcc_toolset_version }}/enable && gcc -v 2> last_configure.gccversion && export MAKEFLAGS=-j{{ cores_for_parallel_compile }} && ( rm -rf qtwebengine* qtpdf* qtvirtualkeyboard* qtwebview* || true ) && cmake -G Ninja -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/qt-{{ qt_version }} -DQT_BUILD_TESTS=OFF -DQT_BUILD_EXAMPLES=OFF  -DFEATURE_clang=OFF -DFEATURE_clangcpp=OFF -DCMAKE_DISABLE_FIND_PACKAGE_Clang=ON  -DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON   -DCMAKE_C_FLAGS="-O3 -DNDEBUG -g0 -pipe {{ comp_opt }}" -DCMAKE_CXX_FLAGS="-O3 -DNDEBUG -g0 -pipe {{ comp_opt }}" -DQT_BUILD_TOOLS=ON -DQT_BUILD_QTHELP=ON
+        cmd: . /opt/rh/gcc-toolset-{{ gcc_toolset_version }}/enable && gcc -v 2> last_configure.gccversion && export MAKEFLAGS=-j{{ cores_for_parallel_compile }} && ( rm -rf qtwebengine* qtpdf* qtvirtualkeyboard* qtwebview* || true ) && cmake -G Ninja -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/qt-{{ qt_version }} -DQT_BUILD_TESTS=OFF -DQT_BUILD_EXAMPLES=OFF  -DFEATURE_clang=OFF -DFEATURE_clangcpp=OFF -DCMAKE_DISABLE_FIND_PACKAGE_Clang=ON  -DCMAKE_DISABLE_FIND_PACKAGE_LLVM=ON   -DCMAKE_C_FLAGS="-O3 -DNDEBUG -g0 -pipe {{ comp_opt }}" -DCMAKE_CXX_FLAGS="-O3 -DNDEBUG -g0 -pipe {{ comp_opt }}" -DQT_BUILD_TOOLS=ON -DQT_BUILD_QTHELP=ON -DQT_FEATURE_sql_psql=ON
 
 # -DBUILD_SHARED_LIBS=ON -DFEATURE_static=OFF
 # if we want to test UNITY BUILDS add -DCMAKE_UNITY_BUILD=ON -DCMAKE_UNITY_BUILD_BATCH_SIZE=8
